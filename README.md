@@ -38,3 +38,12 @@ The data for this project is sourced from the Kaggle dataset:
   	description varchar(400)
   );
   ```
+### 1. Count the Number of Movies vs TV Shows
+
+```sql
+SELECT 
+    type,
+    COUNT(*)
+FROM netflix
+GROUP BY show_id;
+```

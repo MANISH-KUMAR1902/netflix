@@ -47,3 +47,36 @@ SELECT
 FROM netflix
 GROUP BY show_id;
 ```
+
+## 2. find duplicate duplicate remove 
+```sql
+  select * from netflix_titles
+  where title in(
+  select title
+  from netflix_titles
+  group by title
+  having count(*) >1)
+  order by title
+  
+  with cte as(
+  	select 
+  			*,row_number() over(partition by title order by show_id) rnk
+  	from netflix_titles
+  )
+  select * from cte 
+  where rnk>1
+  order by show_id
+```
+
+## 3. remove the duplicate rows 
+```sql
+  WITH CTE AS (
+      SELECT *,
+             ROW_NUMBER() OVER (PARTITION BY title ORDER BY show_id) AS rn
+      FROM netflix_titles
+  )
+  DELETE FROM netflix_titles
+  WHERE show_id IN (
+      SELECT show_id FROM CTE WHERE rn > 1
+  );
+```
